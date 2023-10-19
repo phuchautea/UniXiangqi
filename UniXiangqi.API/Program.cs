@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Infrastructure.Identity;
 using UniXiangqi.Infrastructure.Persistence;
 using UniXiangqi.Infrastructure.Services;
@@ -10,7 +11,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 }, ServiceLifetime.Transient);
 // Add services to the container.
-builder.Services.AddTransient<UserService>();
+
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
