@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniXiangqi.Application.DTOs.User;
+using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Infrastructure.Services;
 
 namespace UniXiangqi.API.Controllers
@@ -9,8 +10,8 @@ namespace UniXiangqi.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private UserService userService;
-        public UsersController(UserService userService)
+        private IUserService userService;
+        public UsersController(IUserService userService)
         {
             this.userService = userService;
         }
@@ -26,6 +27,29 @@ namespace UniXiangqi.API.Controllers
                 if (result.statusCode == 1)
                 {
                     return Ok(new { Message = result.message });
+                }
+                else
+                {
+                    return Unauthorized(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        // POST: api/auth/login
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            try
+            {
+                var result = await userService.Login(request);
+
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Token = result.message });
                 }
                 else
                 {
