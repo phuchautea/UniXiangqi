@@ -1,0 +1,41 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using UniXiangqi.Application.DTOs.User;
+using UniXiangqi.Infrastructure.Services;
+
+namespace UniXiangqi.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
+    {
+        private UserService userService;
+        public UsersController(UserService userService)
+        {
+            this.userService = userService;
+        }
+        // POST: api/user/register
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            try
+            {
+                var result = await userService.Register(request);
+
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message });
+                }
+                else
+                {
+                    return Unauthorized(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+    }
+}
