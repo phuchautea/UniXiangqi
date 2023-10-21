@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using UniXiangqi.Domain.Entities;
 using UniXiangqi.Infrastructure.Identity;
 
 namespace UniXiangqi.Infrastructure.Persistence
@@ -15,5 +11,7 @@ namespace UniXiangqi.Infrastructure.Persistence
         {
 
         }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<UserInRoom> UserInRooms { get; set; }
     }
 }
