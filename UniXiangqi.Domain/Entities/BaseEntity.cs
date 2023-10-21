@@ -6,7 +6,7 @@ namespace UniXiangqi.Domain.Entities
     public class BaseEntity
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         [Column(TypeName = "datetime")]
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
