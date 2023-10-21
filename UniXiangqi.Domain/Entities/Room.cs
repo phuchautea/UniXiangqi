@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using UniXiangqi.Domain.Utilities;
 using UniXiangqi.Domain.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace UniXiangqi.Domain.Entities
 {
@@ -10,7 +11,9 @@ namespace UniXiangqi.Domain.Entities
         public string Code { get; set; } = RandomUtility.RandomString(7);
         public int GameTimer { get; set; } = 10;
         public int MoveTimer { get; set; } = 2;
-        public virtual required ApplicationUser HostUser { get; set; }
+        public string? HostUserId { get; set; }
+        public virtual ApplicationUser? HostUser { get; set; }
+        public string? OpponentUserId { get; set; }
         public virtual ApplicationUser? OpponentUser { get; set; }
         public string HostSide { get; set; } = string.Empty;
         public bool IsRated { get; set; }
