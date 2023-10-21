@@ -4,5 +4,6 @@ namespace UniXiangqi.Domain.Identity
 {
     public class ApplicationUser : IdentityUser
     {
+
     }
 }

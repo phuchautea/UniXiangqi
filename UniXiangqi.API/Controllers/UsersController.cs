@@ -15,7 +15,7 @@ namespace UniXiangqi.API.Controllers
         {
             this.userService = userService;
         }
-        // POST: api/user/register
+        // POST: api/users/register
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -38,7 +38,7 @@ namespace UniXiangqi.API.Controllers
                 return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
             }
         }
-        // POST: api/auth/login
+        // POST: api/users/login
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
