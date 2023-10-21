@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using UniXiangqi.Application.DTOs.User;
 using UniXiangqi.Application.Interfaces;
-using UniXiangqi.Infrastructure.Identity;
+using UniXiangqi.Domain.Identity;
 
 namespace UniXiangqi.Infrastructure.Services
 {

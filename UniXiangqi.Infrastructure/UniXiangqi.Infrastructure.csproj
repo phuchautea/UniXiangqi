@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UniXiangqi.Application\UniXiangqi.Application.csproj" />
+    <ProjectReference Include="..\UniXiangqi.Domain\UniXiangqi.Domain.csproj" />
   </ItemGroup>
 
 </Project>
