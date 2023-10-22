@@ -1,3 +1,4 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniXiangqi.Application.DTOs.Room;
@@ -52,6 +53,45 @@ namespace UniXiangqi.Infrastructure.Services
                 return (0, "Đã có lỗi xảy ra", ex.Message.ToString());
             }
             
+        }
+        //Get all Rooms
+        public async Task<(int statusCode, string message, IEnumerable<Room> rooms)> GetAll()
+        {
+            try
+            {
+                var rooms = await _dbContext.Rooms.ToListAsync();
+                return (1, "Lấy danh sách thành công", rooms);
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra" + ex.Message, null);
+            }
+        }
+        //Get by roomCode
+        public async Task<(int statusCode, string message, Room room)> GetByCode(string roomCode)
+        {
+            try
+            {
+                var room = await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Code == roomCode);
+                return (1, $"Lấy phòng theo code: {roomCode} thành công", room);
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra" + ex.Message, null);
+            }
+        }
+        //Get by UserId
+        public async Task<(int statusCode, string message, IEnumerable<Room> rooms)> GetByUserId(string userId)
+        {
+            try
+            {
+                var rooms = await _dbContext.Rooms.Where(r => r.HostUserId == userId || r.OpponentUserId == userId).ToListAsync();
+                return (1, $"Lấy danh sách phòng theo userId: {userId} thành công", rooms);
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra" + ex.Message, null);
+            }
         }
 
     }
