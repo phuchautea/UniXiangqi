@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UniXiangqi.Application.DTOs.Room;
 using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Domain.Entities;
