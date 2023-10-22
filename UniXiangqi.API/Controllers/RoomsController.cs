@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniXiangqi.Application.DTOs.Room;
 using UniXiangqi.Application.Interfaces;
+using UniXiangqi.Infrastructure.Services;
 
 namespace UniXiangqi.API.Controllers
 {
@@ -36,5 +37,6 @@ namespace UniXiangqi.API.Controllers
                 return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
             }
         }
+
     }
 }
