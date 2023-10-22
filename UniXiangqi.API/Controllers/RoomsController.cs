@@ -16,7 +16,7 @@ namespace UniXiangqi.API.Controllers
         }
         // POST: api/rooms
         [HttpPost]
-        [Route("/rooms")]
+        [Route("/")]
         public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
         {
             try

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniXiangqi.Application.DTOs.Room;
 using UniXiangqi.Application.Interfaces;
@@ -16,12 +16,6 @@ namespace UniXiangqi.Infrastructure.Services
             this._dbContext = dbContext;
             this.userManager = userManager;
         }
-
-        public async Task<bool> HasOpponent(string roomCode)
-        {
-            return await _dbContext.Rooms.AnyAsync(room => room.Code == roomCode && room.OpponentUserId != null);
-        }
-
         public async Task<(int statusCode, string message, string roomCode)> Create(CreateRoomRequest request)
         {
             var hostUser = await userManager.FindByIdAsync(request.HostUserId);
@@ -53,6 +47,5 @@ namespace UniXiangqi.Infrastructure.Services
             }
             
         }
-
     }
 }
