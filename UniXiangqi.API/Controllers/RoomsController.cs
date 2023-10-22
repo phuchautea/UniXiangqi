@@ -37,6 +37,68 @@ namespace UniXiangqi.API.Controllers
                 return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
             }
         }
-
+        [HttpGet]
+        [Route("/rooms")]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var result = await roomService.GetAll();
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, rooms = result.rooms });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("/room/{roomCode}")]
+        public async Task<IActionResult> GetByCode(string roomCode)
+        {
+            try
+            {
+                var result = await roomService.GetByCode(roomCode);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, room = result.room });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("/room/user/{userId}")]
+        public async Task<IActionResult> GetByUserId(string userId)
+        {
+            try
+            {
+                var result = await roomService.GetByUserId(userId);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, room = result.rooms });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
     }
 }
