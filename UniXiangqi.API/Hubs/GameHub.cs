@@ -1,15 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
-using UniXiangqi.Application.DTOs.Room;
 using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Domain.Entities;
 using UniXiangqi.Domain.Entities.Game;
 using UniXiangqi.Infrastructure.Persistence;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace UniXiangqi.API.Hubs
 {
