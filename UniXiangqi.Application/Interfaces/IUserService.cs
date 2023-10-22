@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UniXiangqi.Application.DTOs.User;
-using UniXiangqi.Domain.Identity;
 
 namespace UniXiangqi.Application.Interfaces
 {
@@ -13,7 +12,5 @@ namespace UniXiangqi.Application.Interfaces
     {
         Task<(int statusCode, string message)> Register(RegisterRequest request);
         Task<(int statusCode, string message)> Login(LoginRequest request);
-        Task<(int statusCode, string message, InfoResponse data)> GetUserInfo();
-        string GetJWT();
     }
 }
