@@ -15,7 +15,7 @@ namespace UniXiangqi.API.Controllers
         }
         // POST: api/rooms
         [HttpPost]
-        [Route("/")]
+        [Route("/rooms")]
         public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
         {
             try
@@ -36,5 +36,6 @@ namespace UniXiangqi.API.Controllers
                 return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
             }
         }
+
     }
 }
