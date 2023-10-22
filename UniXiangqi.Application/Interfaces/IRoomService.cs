@@ -1,4 +1,5 @@
 ﻿using UniXiangqi.Application.DTOs.Room;
+using UniXiangqi.Domain.Entities;
 
 namespace UniXiangqi.Application.Interfaces
 {
@@ -6,6 +7,5 @@ namespace UniXiangqi.Application.Interfaces
     {
         Task<bool> HasOpponent(string roomCode);
         Task<(int statusCode, string message, string roomCode)> Create(CreateRoomRequest request);
-
     }
 }

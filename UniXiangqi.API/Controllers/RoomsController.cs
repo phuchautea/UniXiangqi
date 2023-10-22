@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniXiangqi.Application.DTOs.Room;
 using UniXiangqi.Application.Interfaces;
+using UniXiangqi.Infrastructure.Services;
 
 namespace UniXiangqi.API.Controllers
 {
