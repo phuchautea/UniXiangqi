@@ -14,6 +14,7 @@ namespace UniXiangqi.Infrastructure.Persistence
         }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<UserInRoom> UserInRooms { get; set; }
+        public DbSet<Match> Matches { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
