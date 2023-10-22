@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.Json;
 using UniXiangqi.Application.DTOs.User;
 using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Domain.Identity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UniXiangqi.Infrastructure.Services
 {
@@ -11,10 +16,12 @@ namespace UniXiangqi.Infrastructure.Services
     {
         private readonly UserManager<ApplicationUser> userManager;
         private ITokenService tokenService;
-        public UserService(UserManager<ApplicationUser> userManager, ITokenService tokenService)
+        private IHttpContextAccessor httpContextAccessor;
+        public UserService(UserManager<ApplicationUser> userManager, ITokenService tokenService, IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
+            this.httpContextAccessor = httpContextAccessor;
         }
         public async Task<(int statusCode, string message)> Register(RegisterRequest request)
         {
@@ -47,9 +54,9 @@ namespace UniXiangqi.Infrastructure.Services
             var userRoles = await userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
-               new Claim(ClaimTypes.Name, user.UserName),
-               new Claim(ClaimTypes.NameIdentifier, user.Id),
-               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
             foreach (var userRole in userRoles)
@@ -58,6 +65,66 @@ namespace UniXiangqi.Infrastructure.Services
             }
             string token = tokenService.CreateToken(authClaims);
             return (1, token);
+        }
+        public async Task<(int statusCode, string message, InfoResponse data)> GetUserInfo()
+        {
+            var userInfo = new InfoResponse();
+            string jwtToken = string.Empty;
+            // Lấy từ Context.Items
+            if (httpContextAccessor.HttpContext.Items.TryGetValue("jwt", out var jwtFromContext))
+            {
+                jwtToken = jwtFromContext.ToString();
+            }
+            else
+            {
+                // Lấy từ Authorization header
+                var authorizationHeader = httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+                if (!string.IsNullOrEmpty(authorizationHeader))
+                {
+                    jwtToken = authorizationHeader.Trim();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(jwtToken))
+            {
+                JwtSecurityToken jwt = tokenService.ReadToken(jwtToken);
+
+                if (jwt != null)
+                {
+                    string userId = jwt.Claims.First(claim => claim.Type == "nameid").Value;
+                    var user = await userManager.FindByIdAsync(userId);
+                    if (user == null)
+                        return (0, "User không hợp lệ", userInfo);
+                    var info = new InfoResponse
+                    {
+                        Email = user.Email,
+                        UserName = user.UserName,
+                        Id = user.Id.ToString(),
+                    };
+                    return (1, "Thành công", info);
+                }
+                return (0, "Token không hợp lệ", userInfo);
+            }
+            return (0, "Chưa đăng nhập", userInfo);
+            
+        }
+        public string GetJWT()
+        {
+            var authorizationHeader = httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+            if (!string.IsNullOrEmpty(authorizationHeader))
+            {
+                string jwtToken = authorizationHeader.Trim();
+
+                JwtSecurityToken jwt = tokenService.ReadToken(jwtToken);
+
+                if (jwt != null)
+                {
+                    string userId = jwt.Claims.First(claim => claim.Type == "unique_name").Value;
+                    string userName = jwt.Claims.First(claim => claim.Type == "nameid").Value;
+                }
+                return authorizationHeader.Trim();
+            }
+            return string.Empty;
         }
 
     }

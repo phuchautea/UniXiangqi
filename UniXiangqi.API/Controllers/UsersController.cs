@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using UniXiangqi.Application.DTOs.User;
 using UniXiangqi.Application.Interfaces;
 using UniXiangqi.Infrastructure.Services;
@@ -50,6 +51,29 @@ namespace UniXiangqi.API.Controllers
                 if (result.statusCode == 1)
                 {
                     return Ok(new { Token = result.message });
+                }
+                else
+                {
+                    return Unauthorized(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        // GET: api/users/info
+        [HttpGet]
+        [Route("info")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            try
+            {
+                var result = await userService.GetUserInfo();
+
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { User = result.data });
                 }
                 else
                 {
