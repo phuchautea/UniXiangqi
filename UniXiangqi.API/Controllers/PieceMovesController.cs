@@ -14,7 +14,7 @@ namespace UniXiangqi.API.Controllers
             this.pieceMoveService = pieceMoveService;
         }
         [HttpPost]
-        [Route("/pieceMoves")]
+        [Route("")]
         public async Task<IActionResult> Create([FromBody] CreatePieceMoveDto pieceMoveDto)
         {
             try
@@ -37,7 +37,7 @@ namespace UniXiangqi.API.Controllers
         }
 
         [HttpGet]
-        [Route("/pieceMoves")]
+        [Route("")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -58,7 +58,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpGet]
-        [Route("/pieceMoves/{matchId}")]
+        [Route("{matchId}")]
         public async Task<IActionResult> GetByCode(string matchId)
         {
             try

@@ -14,7 +14,7 @@ namespace UniXiangqi.API.Controllers
             this.matchService = matchService;
         }
         [HttpPost]
-        [Route("/matches")]
+        [Route("")]
         public async Task<IActionResult> Create([FromBody] CreateMatchRequest request)
         {
             try
@@ -23,11 +23,11 @@ namespace UniXiangqi.API.Controllers
 
                 if (result.statusCode == 1)
                 {
-                    return Ok(new { Message = result.message, RoomId = result.RoomId });
+                    return Ok(new { Message = result.message, MatchId = result.MatchId });
                 }
                 else
                 {
-                    return BadRequest(new { Message = result.message, Error = result.RoomId });
+                    return BadRequest(new { Message = result.message, Error = result.MatchId });
                 }
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpPost]
-        [Route("/updateStatus")]
+        [Route("updateStatus")]
         public async Task<IActionResult> UpdateMatchStatus([FromBody] MatchStatusDto request)
         {
             try

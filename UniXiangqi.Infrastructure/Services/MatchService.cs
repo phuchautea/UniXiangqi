@@ -16,14 +16,15 @@ namespace UniXiangqi.Infrastructure.Services
             this._dbContext = dbContext;
 
         }
-        public async Task<(int statusCode, string message,string RoomId)> Create(CreateMatchRequest request)
+        public async Task<(int statusCode, string message,string MatchId)> Create(CreateMatchRequest request)
         {
             try {
                 //Lấy các giá trị từ Room tương ứng
                 var room = await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Code == request.roomCode);
+                var match = new Domain.Entities.Match();
                 if (room != null)
                 {     
-                  var match = new Domain.Entities.Match();
+                    
 
                     match.MatchStatus = Domain.Enums.MatchStatus.playing;
                     match.RoomId = room.Id;
@@ -33,14 +34,13 @@ namespace UniXiangqi.Infrastructure.Services
                     match.NextTurn = DateTime.Now.AddMinutes(room.MoveTimer);
                     match.StartTime = DateTime.Now;
                     match.EndTime = DateTime.Now.AddMinutes(room.GameTimer);
-                     match.WinnerUserId = String.Empty;
+                    match.WinnerUserId = String.Empty;
 
                     var createMatch = await _dbContext.Matches.AddAsync(match);
                     await _dbContext.SaveChangesAsync();
-                  
+                    
                 }
-                return (1, "Tạo trận đấu thành công", room.Id);
-
+                return (1, "Tạo trận đấu thành công", match.Id);
             }
             catch (Exception ex)
             {

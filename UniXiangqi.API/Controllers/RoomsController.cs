@@ -16,7 +16,7 @@ namespace UniXiangqi.API.Controllers
         }
         // POST: api/rooms
         [HttpPost]
-        [Route("/rooms")]
+        [Route("")]
         public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
         {
             try
@@ -59,7 +59,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpGet]
-        [Route("/room/{roomCode}")]
+        [Route("{roomCode}")]
         public async Task<IActionResult> GetByCode(string roomCode)
         {
             try
@@ -80,7 +80,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpGet]
-        [Route("/room/user/{userId}")]
+        [Route("user/{userId}")]
         public async Task<IActionResult> GetByUserId(string userId)
         {
             try
