@@ -64,7 +64,7 @@ namespace UniXiangqi.Infrastructure.Services
         
 
         //Get all piecemoves
-        async Task<(int statusCode, string message, IEnumerable<PieceMove> pieceMoves)> IPieceMoveService.GetAll()
+        public async Task<(int statusCode, string message, IEnumerable<PieceMove> pieceMoves)> GetAll()
         {
             try
             {
