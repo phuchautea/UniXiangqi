@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniXiangqi.Application.DTOs.Match;
 using UniXiangqi.Application.Interfaces;
-using UniXiangqi.Infrastructure.Services;
 
 namespace UniXiangqi.API.Controllers
 {
@@ -30,6 +28,27 @@ namespace UniXiangqi.API.Controllers
                 else
                 {
                     return BadRequest(new { Message = result.message, Error = result.RoomId });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        [HttpPost]
+        [Route("/updateStatus")]
+        public async Task<IActionResult> UpdateMatchStatus([FromBody] MatchStatusDto request)
+        {
+            try
+            {
+                var result = await matchService.UpdateMatchStatus(request);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, Status = result.newStatus  });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message, Error = result.newStatus });
                 }
             }
             catch (Exception ex)
