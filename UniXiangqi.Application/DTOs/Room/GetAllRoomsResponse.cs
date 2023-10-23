@@ -1,6 +1,6 @@
 ﻿namespace UniXiangqi.Application.DTOs.Room
 {
-    public class RoomWithUserNameReponse
+    public class GetAllRoomsResponse
     {
         public string Code { get; set; }
         public string HostUserName { get; set; }
