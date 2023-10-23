@@ -1,18 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using UniXiangqi.Application.DTOs.Match;
 using UniXiangqi.Application.Interfaces;
+using UniXiangqi.Domain.Enums;
 using UniXiangqi.Domain.Identity;
 using UniXiangqi.Infrastructure.Persistence;
-using UniXiangqi.Application.DTOs.Match;
-using UniXiangqi.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 
 namespace UniXiangqi.Infrastructure.Services
 {
@@ -54,6 +46,27 @@ namespace UniXiangqi.Infrastructure.Services
             {
                 // Xử lý lỗi (ví dụ: log lỗi)
                 return (0,"Đã có lỗi xảy ra", ex.Message.ToString());
+            }
+        }
+        public async Task<(int statusCode, string message, MatchStatus newStatus)> UpdateMatchStatus(MatchStatusDto request)
+        {
+            try 
+            {
+                var match = await _dbContext.Matches.FirstOrDefaultAsync(m => m.Id == request.matchId);
+                if (match != null)
+                {
+                    match.MatchStatus = request.newStatus;
+                    await _dbContext.SaveChangesAsync();
+                    return (1, "Cập nhật trạng thái cho phòng thành công", request.newStatus);
+                }
+                else
+                {
+                    return (0, "Không tìm thấy trận đấu với ID đã cung cấp", request.newStatus);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra: " + ex.Message, MatchStatus.pending);
             }
         }
     }
