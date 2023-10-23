@@ -21,6 +21,9 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoomService, RoomService>();
 builder.Services.AddTransient<IMatchService, MatchService>();
+builder.Services.AddTransient<IPieceMoveService, PieceMoveService>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
