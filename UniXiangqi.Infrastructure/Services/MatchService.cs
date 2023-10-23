@@ -69,5 +69,30 @@ namespace UniXiangqi.Infrastructure.Services
                 return (0, "Đã có lỗi xảy ra: " + ex.Message, MatchStatus.pending);
             }
         }
+        public async Task<(int statusCode, string message, Domain.Entities.Match match)> GetById(string matchId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(matchId))
+                {
+                    return (0, "Mã trận đấu không hợp lệ", null);
+                }
+
+                var match = await _dbContext.Matches.FirstOrDefaultAsync(r => r.Id == matchId);
+
+                if (match != null)
+                {
+                    return (1, $"Lấy trận đấu theo id: {matchId} thành công", match);
+                }
+                else
+                {
+                    return (0, $"Không tìm thấy trận đấu với id: {matchId}", null);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra: " + ex.Message, null);
+            }
+        }
     }
 }

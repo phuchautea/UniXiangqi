@@ -56,6 +56,27 @@ namespace UniXiangqi.API.Controllers
                 return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
             }
         }
+        [HttpGet]
+        [Route("/matche/{matchId}")]
+        public async Task<IActionResult> GetById(string matchId)
+        {
+            try
+            {
+                var result = await matchService.GetById(matchId);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, match = result.match });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
 
     }
 }
