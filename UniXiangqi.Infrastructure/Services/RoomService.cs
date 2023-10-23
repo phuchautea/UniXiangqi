@@ -54,19 +54,19 @@ namespace UniXiangqi.Infrastructure.Services
             
         }
         //Get all Rooms (with hostUserName and opponentUserName)
-        public async Task<(int statusCode, string message, IEnumerable<RoomWithUserNameReponse> rooms)> GetAll()
+        public async Task<(int statusCode, string message, IEnumerable<GetAllRoomsResponse> rooms)> GetAll()
         {
             try { 
                 var rooms = await _dbContext.Rooms.ToListAsync();
                 // Tạo danh sách RoomWithUserNameReponse để chứa thông tin phòng với userName và IsRated
-                var roomsWithUserNames = new List<RoomWithUserNameReponse>();
+                var roomsWithUserNames = new List<GetAllRoomsResponse>();
                 foreach (var room in rooms)
                 {
                     var hostUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == room.HostUserId);
                     var hostUserName = hostUser != null ? hostUser.UserName : null;
                     var opponentUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == room.OpponentUserId);
                     var opponentUserName = opponentUser != null ? opponentUser.UserName : null;
-                    var roomWithUserNameReponse = new RoomWithUserNameReponse
+                    var roomWithUserNameReponse = new GetAllRoomsResponse
                     {
                         Code = room.Code,
                         HostUserName = hostUserName,
