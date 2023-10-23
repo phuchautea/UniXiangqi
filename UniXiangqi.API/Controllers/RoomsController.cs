@@ -38,7 +38,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpGet]
-        [Route("/rooms")]
+        [Route("")]
         public async Task<IActionResult> GetAll()
         {
             try
