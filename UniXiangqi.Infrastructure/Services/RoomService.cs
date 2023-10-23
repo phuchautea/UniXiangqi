@@ -1,4 +1,3 @@
-using Azure.Core;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniXiangqi.Application.DTOs.Room;
@@ -54,13 +53,31 @@ namespace UniXiangqi.Infrastructure.Services
             }
             
         }
-        //Get all Rooms
-        public async Task<(int statusCode, string message, IEnumerable<Room> rooms)> GetAll()
+        //Get all Rooms (with hostUserName and opponentUserName)
+        public async Task<(int statusCode, string message, IEnumerable<RoomWithUserNameReponse> rooms)> GetAll()
         {
-            try
-            {
+            try { 
                 var rooms = await _dbContext.Rooms.ToListAsync();
-                return (1, "Lấy danh sách thành công", rooms);
+                // Tạo danh sách RoomWithUserNameReponse để chứa thông tin phòng với userName và IsRated
+                var roomsWithUserNames = new List<RoomWithUserNameReponse>();
+                foreach (var room in rooms)
+                {
+                    var hostUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == room.HostUserId);
+                    var hostUserName = hostUser != null ? hostUser.UserName : null;
+                    var opponentUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == room.OpponentUserId);
+                    var opponentUserName = opponentUser != null ? opponentUser.UserName : null;
+                    var roomWithUserNameReponse = new RoomWithUserNameReponse
+                    {
+                        Code = room.Code,
+                        HostUserName = hostUserName,
+                        OpponentUserName = opponentUserName,
+                        IsRated = room.IsRated,
+                        GameTimer = room.GameTimer,
+                        MoveTimer = room.MoveTimer
+                    };
+                    roomsWithUserNames.Add(roomWithUserNameReponse);
+                }
+            return (1, "Lấy danh sách thành công", roomsWithUserNames);
             }
             catch (Exception ex)
             {
