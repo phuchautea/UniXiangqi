@@ -29,6 +29,24 @@ namespace UniXiangqi.Domain.Entities.Game
             }
             LoadInfoPieces();
         }
+        public string[,] ToChessPieces(string boardData)
+        {
+            string[,] chessPieces;
+            int width = 9;
+            string[] values = boardData.Split(',');
+
+            // Create a 2D array and initialize it
+            chessPieces = new string[values.Length / width, width];
+
+            // Populate the 2D array
+            for (int i = 0; i < values.Length; i++)
+            {
+                int x = i % width;
+                int y = i / width;
+                chessPieces[y, x] = values[i];
+            }
+            return chessPieces;
+        }
         public string ToBoardData()
         {
             int rows = chessPieces.GetLength(0);

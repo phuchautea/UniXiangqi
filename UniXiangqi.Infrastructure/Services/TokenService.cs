@@ -28,7 +28,7 @@ namespace UniXiangqi.Infrastructure.Services
             {
                 Issuer = _configuration["JWTKey:ValidIssuer"],
                 Audience = _configuration["JWTKey:ValidAudience"],
-                Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
+                Expires = DateTime.UtcNow.AddDays(_TokenExpiryTimeInHour),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
             };
