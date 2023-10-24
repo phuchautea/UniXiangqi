@@ -57,7 +57,7 @@ namespace UniXiangqi.API.Controllers
             }
         }
         [HttpGet]
-        [Route("/matche/{matchId}")]
+        [Route("{matchId}")]
         public async Task<IActionResult> GetById(string matchId)
         {
             try
@@ -66,6 +66,49 @@ namespace UniXiangqi.API.Controllers
                 if (result.statusCode == 1)
                 {
                     return Ok(new { Message = result.message, match = result.match });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("rooms/{roomCode}")]
+        public async Task<IActionResult> GetByRoomCode(string roomCode)
+        {
+            try
+            {
+                var result = await matchService.GetByRoomCode(roomCode);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, match = result.match });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.message });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal Server Error", Error = ex.Message });
+            }
+        }
+        [HttpGet]
+        [Route("infoMatch/{matchId}")]
+        public async Task<IActionResult> GetInfoMatch(string matchId)
+        {
+            try
+            {
+                var result = await matchService.GetInfoMatch(matchId);
+                if (result.statusCode == 1)
+                {
+                    return Ok(new { Message = result.message, infoMatchResponse = result.infoMatchResponse });
                 }
                 else
                 {

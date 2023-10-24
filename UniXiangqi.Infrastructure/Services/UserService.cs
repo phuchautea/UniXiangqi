@@ -127,5 +127,25 @@ namespace UniXiangqi.Infrastructure.Services
             return string.Empty;
         }
 
+        private void UpdateUserRating(string userId, int scoreChange)
+        {
+            var user = userManager.FindByIdAsync(userId).Result;
+
+            if (user != null)
+            {
+                user.TotalPoint += scoreChange;
+                var updateResult = userManager.UpdateAsync(user).Result;
+
+                if (updateResult.Succeeded)
+                {
+                    Console.WriteLine($"Điểm xếp hạng của người chơi (ID: {userId}) đã được cập nhật. Điểm thay đổi: {scoreChange}");
+                }
+                else
+                {
+                    Console.WriteLine($"Lỗi khi cập nhật điểm xếp hạng cho người chơi (ID: {userId}).");
+                    // Xử lý lỗi khi cập nhật
+                }
+            }
+        }
     }
 }

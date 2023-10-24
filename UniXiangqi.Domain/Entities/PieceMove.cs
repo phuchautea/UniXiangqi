@@ -8,6 +8,8 @@ namespace UniXiangqi.Domain.Entities
     public class PieceMove : BaseEntity
     {
         public string? MatchId { get; set; }
+        public string? RoomCode { get; set; }
+        public string? Side { get; set; }
         public virtual Match? Match { get; set; }
         public string? PlayerUserId { get; set; }
         public virtual ApplicationUser? PlayerUser { get; set; }

@@ -27,9 +27,11 @@ namespace UniXiangqi.Infrastructure.Services
                 var pieceMove = new PieceMove
                 {
                     MatchId = pieceMoveDto.MatchId,
+                    RoomCode = pieceMoveDto.RoomCode,
                     PlayerUserId = pieceMoveDto.PlayerUserId,
                     MoveContent = pieceMoveDto.MoveContent,
-                    ChessBoard = pieceMoveDto.ChessBoard
+                    ChessBoard = pieceMoveDto.ChessBoard,
+                    Side = pieceMoveDto.Side,
                 };
 
                 // Thêm đối tượng PieceMove vào cơ sở dữ liệu
@@ -54,6 +56,19 @@ namespace UniXiangqi.Infrastructure.Services
             {
                 var pieceMoves = await _dbContext.PieceMoves.Where(r => r.MatchId == matchId).ToListAsync();
                 return (1, $"Lấy danh sách bước di chuyển theo MatchId: {matchId} thành công", pieceMoves);
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra" + ex.Message, null);
+            }
+        }
+        //Get by RoomCode
+        public async Task<(int statusCode, string message, PieceMove pieceMove)> GetLastestByRoomCode(string roomCode)
+        {
+            try
+            {
+                var latestPieceMove = await _dbContext.PieceMoves.Where(r => r.RoomCode == roomCode).OrderByDescending(r => r.CreatedAt).FirstOrDefaultAsync();
+                return (1, $"Lấy danh sách bước di chuyển theo roomCode: {roomCode} thành công", latestPieceMove);
             }
             catch (Exception ex)
             {

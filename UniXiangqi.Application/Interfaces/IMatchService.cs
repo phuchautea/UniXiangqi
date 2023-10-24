@@ -10,5 +10,7 @@ namespace UniXiangqi.Application.Interfaces
         Task<(int statusCode, string message, MatchStatus newStatus)> UpdateMatchStatus(MatchStatusDto request);
 
         Task<(int statusCode, string message, Match match)> GetById(String matchId);
+        Task<(int statusCode, string message, Match match)> GetByRoomCode(String roomCode);
+        Task<(int statusCode, string message, InfoMatchResponse infoMatchResponse)> GetInfoMatch(string matchId);
     }
 }

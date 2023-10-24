@@ -8,6 +8,7 @@ namespace UniXiangqi.Domain.Entities
     public class Match : BaseEntity
     {
         public string? RoomId { get; set; }
+        public string? RoomCode { get; set; }
         public virtual Room? Room { get; set; }
         public string RedUserId { get; set; } = String.Empty;
         public string BlackUserId { get; set; } = String.Empty;

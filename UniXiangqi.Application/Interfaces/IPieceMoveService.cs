@@ -9,7 +9,7 @@ namespace UniXiangqi.Application.Interfaces
         Task<(int statusCode, string message, IEnumerable<PieceMove> pieceMoves)> GetAll();
 
         Task<(int statusCode, string message, IEnumerable<PieceMove> pieceMoves)> GetByMatchId(string matchId);
-
+        Task<(int statusCode, string message, PieceMove pieceMove)> GetLastestByRoomCode(string roomCode);
 
 
     }

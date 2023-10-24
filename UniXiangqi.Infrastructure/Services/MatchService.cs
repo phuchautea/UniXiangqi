@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using UniXiangqi.Application.DTOs.Match;
 using UniXiangqi.Application.Interfaces;
+using UniXiangqi.Domain.Entities;
 using UniXiangqi.Domain.Enums;
 using UniXiangqi.Domain.Identity;
 using UniXiangqi.Infrastructure.Persistence;
@@ -11,10 +12,11 @@ namespace UniXiangqi.Infrastructure.Services
     public class MatchService : IMatchService
     {
         private ApplicationDbContext _dbContext;
-        public MatchService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        private IUserService _userService;
+        public MatchService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IUserService userService)
         {
             this._dbContext = dbContext;
-
+            _userService = userService;
         }
         public async Task<(int statusCode, string message,string MatchId)> Create(CreateMatchRequest request)
         {
@@ -28,6 +30,7 @@ namespace UniXiangqi.Infrastructure.Services
 
                     match.MatchStatus = Domain.Enums.MatchStatus.playing;
                     match.RoomId = room.Id;
+                    match.RoomCode = room.Code;
                     match.RedUserId = room.IsHostTurn ? room.HostUserId : room.OpponentUserId;
                     match.BlackUserId = room.IsHostTurn ? room.OpponentUserId : room.HostUserId;
                     match.Turn = room.IsHostTurn ? room.HostUserId : room.OpponentUserId;
@@ -93,6 +96,46 @@ namespace UniXiangqi.Infrastructure.Services
             {
                 return (0, "Đã có lỗi xảy ra: " + ex.Message, null);
             }
+        }
+        public async Task<(int statusCode, string message, Domain.Entities.Match match)> GetByRoomCode(string roomCode)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(roomCode))
+                {
+                    return (0, "Mã phòng không hợp lệ", null);
+                }
+                var room = await _dbContext.Rooms.FirstOrDefaultAsync(c => c.Code == roomCode);
+                if (room != null)
+                {
+                    var match = await _dbContext.Matches.FirstOrDefaultAsync(r => r.RoomId == room.Id);
+                    if (match != null)
+                    {
+                        return (1, $"Lấy trận đấu theo mã phòng: {roomCode} thành công", match);
+                    }
+                }
+
+                return (0, $"Không tìm thấy trận đấu với mã phòng: {roomCode}", null);
+            }
+            catch (Exception ex)
+            {
+                return (0, "Đã có lỗi xảy ra: " + ex.Message, null);
+            }
+        }
+
+        public async Task<(int statusCode, string message, InfoMatchResponse infoMatchResponse)> GetInfoMatch(string matchId)
+        {
+            var infoUser = await _userService.GetUserInfo();
+            var match = await _dbContext.Matches.FirstOrDefaultAsync(r => r.Id == matchId);
+            var pieceMoves = await _dbContext.PieceMoves.Where(p => p.MatchId == matchId).OrderByDescending(p => p.CreatedAt).ToListAsync();
+            var infoMatchResponse = new InfoMatchResponse {
+                Turn = match.Turn,
+                RedUserId = match.RedUserId,
+                BlackUserId = match.BlackUserId,
+                IsYourTurn = infoUser.data.Id == match.Turn,
+                pieceMoves = pieceMoves,
+            };
+            return (1, "Thành công", infoMatchResponse);
         }
     }
 }
